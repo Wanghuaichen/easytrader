@@ -55,7 +55,12 @@ class YHClientTrader(clienttrader.ClientTrader):
 
             self._app = pywinauto.Application().connect(
                 path=self._run_exe_path(exe_path), timeout=10)
+        self._shengji = pywinauto.Application().connect(path=self._config.ZDSHENGJI_EXE_PATH).window(title='自动升级')
+        self._xiadan = pywinauto.Application().connect(path=self._config.XIADAN_EXE_PATH, timeout=1)
+
         self._close_prompt_windows()
+        self.mclose_shengji()
+        self.mclose_promote()
         self._main = self._app.window(title='网上股票交易系统5.0')
         try:
             self._main.window(
@@ -64,9 +69,37 @@ class YHClientTrader(clienttrader.ClientTrader):
             self._wait(2)
             self._switch_window_to_normal_mode()
 
+    def exit(self):
+        try:
+            _app = pywinauto.Application().connect(path=self._config.DEFAULT_EXE_PATH, timeout=1)
+            _app.kill()
+        except:
+            pass
+        self._app.kill()
+    def mclose_shengji(self):
+        try:
+            if self._shengji.exists():
+                self._shengji.close()
+        except:
+            pass
+
+    def mclose_promote(self):
+        try:
+            for w in self._xiadan.windows(class_name='#32770'):
+                if w.window_text() != self._config.TITLE:
+                    w.close()
+        except:
+            pass
     def _switch_window_to_normal_mode(self):
-        self._app.top_window().window(
-            control_id=32812, class_name='Button').click()
+        try:
+            self._app.top_window().window(
+                control_id=32812, class_name='Button').click()
+        except:
+            try:
+                _app = pywinauto.Application().connect(path=self._config.DEFAULT_EXE_PATH, timeout=1)
+                _app.top_window().window(control_id=32812, class_name='Button').click()
+            except:
+                pass
 
     def _handle_verify_code(self):
         control = self._app.top_window().window(control_id=22202)

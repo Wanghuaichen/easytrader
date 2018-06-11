@@ -71,7 +71,8 @@ class CommonConfig:
 
 class YH(CommonConfig):
     DEFAULT_EXE_PATH = r'C:\中国银河证券双子星3.2\Binarystar.exe'
-
+    XIADAN_EXE_PATH = r'C:\中国银河证券双子星3.2\xiadan.exe'
+    ZDSHENGJI_EXE_PATH = r'C:\中国银河证券双子星3.2\zdsj.exe'
     BALANCE_GRID_CONTROL_ID = 1308
 
     GRID_DTYPE = {
